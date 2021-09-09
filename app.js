@@ -2,7 +2,15 @@ let todoItems = [];
 
 function renderTodo(todo) {
 
+    localStorage.setItem('todoItemsRef', JSON.stringify(todoItems));
     const list = document.querySelector('.js-todo-list');
+    const item = document.querySelector(`[data-key='${todo.id}']`);
+
+        if (todo.delete) {
+            item.remove();
+            return
+        }
+
     const isChecked = todo.checked ? 'done': '';
     const node = document.createElement("li");
         node.setAttribute('class', `todo-item ${isChecked}`);
@@ -15,7 +23,11 @@ function renderTodo(todo) {
         <svg><use href="#delete-icon"></use></svg>
         </button> 
         `;
-        list.append(node);
+        if (item) {
+            list.replaceChild(node, item);
+        }else{
+            list.append(node);
+        }
 }
 
 function addTodo(text) {
@@ -34,6 +46,17 @@ function toggleDone(key) {
     const index  = todoItems.findIndex(item => item.id === Number(key));
     todoItems[index].checked = !todoItems[index].checked;
     renderTodo(todoItems[index]);
+}
+
+function deleteTodo(key) {
+    
+    const index = todoItems.findIndex(item => item.id === Number(key));
+    const todo = {
+        delete: true,
+        ...todoItems[index]
+    };
+    todoItems = todoItems.filter(item => item.id !== Number(key));
+    renderTodo(todo);
 }
 
 const form = document.querySelector('.js-form');
@@ -56,4 +79,21 @@ const list = document.querySelector('.js-todo-list');
                 const itemKey = event.target.parentElement.dataset.key;
                 toggleDone(itemKey)
             }
+
+            if (event.target.classList.contains('js-delete-todo')) {
+                const itemKey = event.target.parentElement.dataset.key;
+                deleteTodo(itemKey)  
+                
+            }
         });
+
+document.addEventListener('DOMContentLoaded',() =>{
+    const ref = localStorage.getItem('todoItemsRef');
+    if (ref) {
+        todoItems = JSON.parse(ref);
+        todoItems.forEach(t =>{
+            renderTodo(t);
+        });
+        
+    }
+});
