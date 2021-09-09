@@ -12,12 +12,16 @@
     <main>
         <div class="container">
            
-            <h1 class="app-title ">A fazer</h1>
-            <div class="app-subtitle">INICIAL</div>
-          
+            <h1 class="app-title ">MyDay</h1>
+            <div class="app-subtitle">DayTask</div>
             <ul class="todo-list js-todo-list"></ul>
 
-      
+        <div class="empty-state">
+            <svg class="checklist-icon"><use href="#checklist-icon"></use></svg>
+            <h2 class="empyt-state__title">Adicionar sua primeira tarefa</h2>
+            <p class="empty-state__description">o que voce quer fazer hoje ?</p>
+        </div>
+        
             <form class="js-form">
                 <input autofocus type="text" aria-label="Digite a nova tarefa" 
                        placeholder="Digite uma tarefa" class="js-todo-input">
